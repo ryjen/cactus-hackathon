@@ -1,5 +1,8 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# environment variables
+.env*
+
 # dependencies
 node_modules/
 
@@ -39,3 +42,16 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+
+# APM dependencies
+apm_modules/
+
+
+# APM integrated prompts
+.github/prompts/*-apm.prompt.md
+
+
+# APM integrated agents
+.github/agents/*-apm.agent.md
+.github/agents/*-apm.chatmode.md

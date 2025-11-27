@@ -1,0 +1,10 @@
+name: eyespie
+version: 0.1.0
+description: a game of eyespie with photos
+author: Ryan Jennings
+dependencies:
+  apm:
+    - danielmeppiel/compliance-rules
+    - danielmeppiel/design-guidelines
+  mcp: []
+scripts: {}
