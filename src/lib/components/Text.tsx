@@ -1,5 +1,5 @@
 import { Text as RNText, TextProps as RNTextProps, StyleSheet } from 'react-native';
-import { Theme } from '../core/theme';
+import { Theme } from '@/lib/core/theme';
 
 interface TextProps extends RNTextProps {
     variant?: keyof typeof Theme.typography;

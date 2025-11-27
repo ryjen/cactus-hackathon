@@ -1,5 +1,5 @@
 import { View, ViewProps, StyleSheet } from 'react-native';
-import { Theme } from '../core/theme';
+import { Theme } from '@/lib/core/theme';
 
 interface ContainerProps extends ViewProps {
     centered?: boolean;

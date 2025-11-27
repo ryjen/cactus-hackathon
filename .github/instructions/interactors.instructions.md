@@ -18,15 +18,16 @@ These instructions apply to **Interactors** which contain the business logic for
 2. **Dependency Injection**: Dependencies (Use Cases, Repositories) must be injected via constructor.
 3. **Pure Logic**: Keep logic out of the View, only used dispatching actions.
 4. **Strict Types**: Define explicit `State` and `Action` types.
+5. **Reducers**: Define in a reducers.ts file or folder.
 
 ## Example
 ```typescript
 class GameInteractor extends Interactor<GameState, GameAction> {
   constructor(
     private readonly useCase: GetGameUseCase,
-    store: StoreApi<GameState>
+    private readonly initialState: GameState
   ) {
-    super(store, gameReducer);
+    super(initialState, gameReducer);
   }
 
   protected async inducer(state: GameState, action: GameAction): Promise<void> {

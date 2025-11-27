@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Game, Guess } from '../types';
+import { Game, Guess } from '@/lib/core/types';
 
 interface GameState {
     game: Game | null;

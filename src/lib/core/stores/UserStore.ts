@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Player } from '../types';
+import { Player } from '@/lib/core/types';
 
 interface UserState {
     player: Player | null;
