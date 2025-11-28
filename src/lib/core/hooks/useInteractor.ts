@@ -1,6 +1,5 @@
 import { useStore } from 'zustand';
 import { Interactor } from '../interactors/Interactor';
-import { Subscription } from 'rxjs';
 import { Action, InteractorHook } from '../types';
 
 /**

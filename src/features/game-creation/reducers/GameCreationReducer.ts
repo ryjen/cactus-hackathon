@@ -2,10 +2,12 @@ import { GameCreationState, GameCreationAction } from '@/features/game-creation/
 
 export const initialState: GameCreationState = {
     photo: null,
+    obfuscatedUrl: null,
     obfuscationConfig: { method: 'blur', intensity: 0.5 },
     targetRegion: null,
     clues: [],
     status: 'idle',
+    step: 'camera',
 };
 
 export function gameCreationReducer(
@@ -14,22 +16,19 @@ export function gameCreationReducer(
 ): GameCreationState {
     switch (action.type) {
         case 'SET_PHOTO':
-            return { ...state, photo: action.payload, status: 'editing' };
+            return { ...state, photo: action.payload, status: 'editing', step: 'obfuscate' };
 
         case 'UPDATE_OBFUSCATION':
             return { ...state, obfuscationConfig: action.payload };
 
         case 'SET_TARGET_REGION':
-            return { ...state, targetRegion: action.payload };
+            return { ...state, targetRegion: action.payload, step: 'clues' };
 
-        case 'ADD_CLUE':
-            return { ...state, clues: [...state.clues, action.payload] };
+        case 'OBFUSCATION_SUCCESS':
+            return { ...state, obfuscatedUrl: action.payload };
 
-        case 'REMOVE_CLUE':
-            return {
-                ...state,
-                clues: state.clues.filter((clue) => clue.id !== action.payload),
-            };
+        case 'FINALIZE_GAME':
+            return { ...state, step: 'review', status: 'ready' };
 
         case 'RESET':
             return initialState;

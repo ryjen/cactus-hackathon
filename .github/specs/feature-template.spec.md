@@ -11,27 +11,20 @@
 ### Domain
 - **Entities**: [New entities]
 - **Use Cases**:
-  - `DoSomethingUseCase`
-  - `GetSomethingUseCase`
+  - `DoSomethingUseCase` see [domain.instructions.md](./domain.instructions.md)
+  - `GetSomethingUseCase` see [domain.instructions.md](./domain.instructions.md)
 
 ### Data
-- **Repository**: `ISomethingRepository`
+- **Repository**: `ISomethingRepository` see [domain.instructions.md](./domain.instructions.md)
 - **Mapping**:
   - `SomethingMapperToDomain`
 
 ### Presentation
-- **Interactor**: `SomethingInteractor`
-- **Components**:
-  - `SomethingScreen`
-  - `SomethingList`
-- **Store**:
-  - `SomethingStore`
-- **Reducer**:
-  - `SomethingReducer`
-- **Actions**:
-  - `SomethingActions`
-- **Mapper**:
-  - `SomethingMapperToState`
+
+- **Interactor**: `SomethingInteractor` see [interactors.instructions.md](./interactors.instructions.md)
+- **Screen**: `SomethingScreen` see [screen.instructions.md](./screen.instructions.md)
+- **Reducer**: `SomethingReducer` see [mvi.instructions.md](./mvi.instructions.md)
+- **Actions**: `SomethingActions` see [mvi.instructions.md](./mvi.instructions.md)
 
 ## Verification
 - [ ] Unit tests for Use Cases

@@ -1,4 +1,4 @@
-import { CameraInteractor } from "../interactors/CameraInteractor";
+import { CameraInteractor } from "../interactors";
 import { useInteractor } from "@/lib/core/hooks";
 import { container } from "tsyringe";
 

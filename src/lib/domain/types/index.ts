@@ -1,0 +1,16 @@
+import { DependencyContainer } from "tsyringe";
+
+/**
+ * Use case interface for business logic
+ */
+export interface IUseCase<TInput, TOutput> {
+    execute(input: TInput): Promise<TOutput>;
+}
+
+export interface FeatureMetadata {
+    name: string;
+    entryComponent: React.ComponentType<any>;
+    screens: Record<string, React.ComponentType<any>>;
+    hooks?: Record<string, any>;
+    init?: (container: DependencyContainer) => void;
+}

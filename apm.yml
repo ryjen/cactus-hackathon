@@ -6,5 +6,13 @@ dependencies:
   apm:
     - danielmeppiel/compliance-rules
     - danielmeppiel/design-guidelines
-  mcp: []
-scripts: {}
+  mcp:
+    #- io.github.github/github-mcp-server
+scripts:
+    audit: "copilot --skip-git-repo-check compliance-audit.prompt.md"
+    gdpr-check: "copilot gdpr-assessment.prompt.md"
+    legal-review: "copilot --skip-git-repo-check legal-review.prompt.md"
+    accessibility: "copilot --skip-git-repo-check accessibility-audit.prompt.md"
+    design-review: "copilot --skip-git-repo-check design-review.prompt.md"
+    style-check: "copilot style-guide-check.prompt.md"
+    "feature-spec": "copilot feature-spec.prompt.md"

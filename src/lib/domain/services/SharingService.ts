@@ -1,28 +1,35 @@
+import { injectable } from 'tsyringe';
 import * as Sharing from 'expo-sharing';
 import * as Linking from 'expo-linking';
+import { Game } from '@/lib/core/types';
 
-export class SharingService {
-    /**
-     * Generate a deep link for a game
-     */
-    static generateGameLink(gameId: string): string {
-        return Linking.createURL(`game/${gameId}`);
-    }
+export interface ISharingService {
+    shareGame(game: Game): Promise<void>;
+}
 
-    /**
-     * Share a game via the system share sheet
-     */
-    static async shareGame(gameId: string): Promise<void> {
-        const link = this.generateGameLink(gameId);
-        const isAvailable = await Sharing.isAvailableAsync();
+@injectable()
+export class SharingService implements ISharingService {
+    async shareGame(game: Game): Promise<void> {
+        // Generate deep link
+        // Scheme: eyespie://game/{gameId}
+        const url = Linking.createURL(`game/${game.id}`, {
+            queryParams: {
+                // We might want to encode some basic data here if we don't have a backend yet
+                // For now, just the ID
+            },
+        });
 
-        if (isAvailable) {
-            await Sharing.shareAsync(link, {
-                dialogTitle: 'Share Eyespie Game',
+        const message = `I spy with my little eye... Can you guess what it is? Play here: ${url}`;
+
+        if (await Sharing.isAvailableAsync()) {
+            await Sharing.shareAsync(url, {
+                dialogTitle: 'Share your game',
+                mimeType: 'text/plain',
+                UTI: 'public.plain-text', 
             });
         } else {
-            // Fallback: copy to clipboard or show link
-            console.warn('Sharing not available on this platform');
+            console.log('Sharing is not available on this platform');
+            // Fallback (e.g., copy to clipboard)
         }
     }
 }

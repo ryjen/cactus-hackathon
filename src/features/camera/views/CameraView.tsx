@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { CameraView as Camera, CameraType, useCameraPermissions } from 'expo-camera';
 import { Text } from '@/lib/components/Text';
@@ -11,6 +11,19 @@ export function CameraView({ state, dispatch }: ViewProps<CameraState, CameraAct
     const [facing, setFacing] = useState<CameraType>('back');
     const [permission, requestPermission] = useCameraPermissions();
     const cameraRef = useRef<Camera>(null);
+
+    const takePicture = useCallback(async () => {
+        if (cameraRef.current) {
+            const photo = await cameraRef.current.takePictureAsync();
+            if (photo) {
+                dispatch({ type: 'CAPTURE', payload: photo.uri });
+            }
+        }
+    }, [cameraRef, dispatch]);
+
+    const toggleCameraFacing = useCallback(() => {
+        setFacing((current) => (current === 'back' ? 'front' : 'back'));
+    }, [facing]);
 
     if (!permission) {
         return <View style={styles.container} />;
@@ -26,19 +39,6 @@ export function CameraView({ state, dispatch }: ViewProps<CameraState, CameraAct
             </View>
         );
     }
-
-    const takePicture = async () => {
-        if (cameraRef.current) {
-            const photo = await cameraRef.current.takePictureAsync();
-            if (photo) {
-                dispatch({ type: 'CAPTURE', payload: photo.uri });
-            }
-        }
-    };
-
-    const toggleCameraFacing = () => {
-        setFacing((current) => (current === 'back' ? 'front' : 'back'));
-    };
 
     return (
         <View style={styles.container}>
