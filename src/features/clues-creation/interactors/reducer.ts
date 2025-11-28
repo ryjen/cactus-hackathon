@@ -13,7 +13,7 @@ export default function reducer(state: CluesState, action: CluesAction): CluesSt
             return {
                 ...state,
                 photoUrl: action.payload!,
-                loading: true,
+                loading: false,
                 error: null,
             };
         case 'RESULT':

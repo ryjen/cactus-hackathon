@@ -14,7 +14,7 @@ import { CluesState, CluesAction } from '../types';
 import { ViewProps } from '@/lib/core/types';
 
 // Feature flag: Only use CactusLM in development builds (not Expo Go)
-const USE_CACTUS_LM = Constants.executionEnvironment === 'standalone';
+const USE_CACTUS_LM = Constants.executionEnvironment !== 'storeClient';
 
 // Conditionally import CactusLM
 let useCactusLM: any = null;
@@ -86,6 +86,14 @@ export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction
     if (!result) return;
     dispatch({ type: 'SAVE', payload: result });
   }, [result, dispatch]);
+
+  if (!state.photoUrl) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text style={styles.progressText}>No photo selected</Text>
+      </View>
+    );
+  }
 
   if (USE_CACTUS_LM && cactusLM?.isDownloading) {
     return (

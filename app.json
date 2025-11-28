@@ -15,16 +15,17 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.rybertjen.eyespie"
+      "bundleIdentifier": "com.micrantha.eyespie"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "architectures": ["arm64-v8a"],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.rybertjen.eyespie"
+      "package": "com.micrantha.eyespie"
     },
     "web": {
       "favicon": "./assets/favicon.png"

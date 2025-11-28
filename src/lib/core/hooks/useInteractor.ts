@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useStore } from 'zustand';
 import { Interactor } from '../interactors/Interactor';
 import { Action, InteractorHook } from '../types';
@@ -16,9 +17,18 @@ export function useInteractor<S, I extends Action<string, any>>(
     // Use Zustand hook for reactivity
     const state = useStore(interactorInstance.getStore());
 
+    // Memoize dispatch and observe to prevent creating new function references on every render
+    const dispatch = useCallback((intent: I) => {
+        interactorInstance.dispatch(intent);
+    }, [interactorInstance]);
+
+    const observe = useCallback((observer: (value: S) => void) => {
+        return interactorInstance.observe(observer);
+    }, [interactorInstance]);
+
     return {
         state,
-        dispatch: interactorInstance.dispatch.bind(interactorInstance),
-        observe: interactorInstance.observe.bind(interactorInstance)
+        dispatch,
+        observe
     };
 }

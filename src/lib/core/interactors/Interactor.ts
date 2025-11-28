@@ -32,14 +32,13 @@ export class Interactor<State, Intent extends Action<string, any>> implements In
     public induce(intent: Intent, state: State): Promise<void> | void { }
 
     public dispatch(intent: Intent): void {
-
         // 1. Reduce
         const currentState = this.store.getState();
         const newState = this.reducer(currentState, intent);
 
         // Only update if state changed
         if (newState !== currentState) {
-            this.store.setState(newState, true); // true = replace
+            this.store.setState(newState);
         }
 
         // 2. Induce (Side Effects)

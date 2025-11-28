@@ -8,8 +8,13 @@ export function CluesScreen() {
     const params = useLocalSearchParams<{ photoUrl: string }>()
 
     useEffect(() => {
-        dispatch({ type: 'START', payload: params.photoUrl });
-    }, [params.photoUrl]);
+        // Use the param photoUrl, or fallback to a test URL for development
+        const photoUrl = params.photoUrl || 'https://picsum.photos/400/300';
+
+        if (photoUrl) {
+            dispatch({ type: 'START', payload: photoUrl });
+        }
+    }, [params.photoUrl, dispatch]);
 
     return (<CluesView state={state} dispatch={dispatch} />)
 }
