@@ -183,8 +183,6 @@ export const AnimatedWelcomeScreen = () => {
                 <View style={styles.spacer} />
                 <View style={styles.spacer} />
                 <Link href="/features/game-share" style={styles.link} title="New Game" />
-                <View style={styles.spacer} />
-                <Link href="/storybook" style={styles.link} title="Storybook" />
             </View>
         </View>
     );

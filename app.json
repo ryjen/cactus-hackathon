@@ -42,6 +42,12 @@
     "updates": {
       "enabled": true,
       "fallbackToCacheTimeout": 0
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ad60ab45-7455-4c90-8712-cdc45187f828"
+      }
     }
   }
 }

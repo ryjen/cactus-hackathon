@@ -7,7 +7,6 @@ import { Image } from 'react-native';
 @injectable()
 export class ObfuscationService implements IObfuscationService {
     async obfuscate(photoUrl: string, config: ObfuscationConfig): Promise<string> {
-        console.log('Obfuscating photo', 'config', config);
 
         // Simple blur implementation: Downscale and upscale
         // We ignore the region for now as Expo ImageManipulator doesn't support easy composition without native modules

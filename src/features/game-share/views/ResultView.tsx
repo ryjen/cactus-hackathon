@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, Share } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, Share, ScrollView } from "react-native";
 import { ViewProps } from "@/lib/core/types";
 import type { GameShareState, GameShareAction } from "../types";
-import { useCallback, useMemo, useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import * as Linking from 'expo-linking';
 import * as Clipboard from 'expo-clipboard';
 import { Button } from "@/lib/components";
@@ -16,7 +16,7 @@ export const ResultView = ({ state, dispatch }: ViewProps<GameShareState, GameSh
     const [obfuscatedPhotoUrl, setObfuscatedPhotoUrl] = useState<string | undefined>();
 
     useEffect(() => {
-        void obfuscationService.obfuscate(state.photoUrl!, { intensity: 50 }).then((url) => {
+        void obfuscationService.obfuscate(state.photoUrl!, { intensity: 99 }).then((url) => {
             setObfuscatedPhotoUrl(url);
         }).catch(console.warn);
     }, [state.photoUrl]);
@@ -39,6 +39,10 @@ export const ResultView = ({ state, dispatch }: ViewProps<GameShareState, GameSh
         });
     }, [gameUrl]);
 
+    const retry = useCallback(() => {
+        dispatch({ type: 'GENERATE' });
+    }, []);
+
     const copyToClipboard = useCallback(async () => {
         await Clipboard.setStringAsync(gameUrl);
     }, [gameUrl]);
@@ -48,17 +52,15 @@ export const ResultView = ({ state, dispatch }: ViewProps<GameShareState, GameSh
             <Text style={styles.header}>Share</Text>
             <Text style={styles.subtext}>Share your game with your friends!</Text>
 
-            <View style={styles.resultContainer}>
-                <View style={styles.imageContainer}>
-                    <Image source={{ uri: obfuscatedPhotoUrl ?? state.photoUrl }} style={styles.image} height={200} />
-                </View>
-
-                <View style={styles.clueContainer}>
-                    {state.clues!.map((clue, index) => (
-                        <Text key={index} style={styles.resultText}>{clue}</Text>
-                    ))}
-                </View>
+            <View style={styles.imageContainer}>
+                <Image source={{ uri: obfuscatedPhotoUrl ?? state.photoUrl }} style={styles.image} height={200} />
             </View>
+
+            <ScrollView style={styles.clueContainer}>
+                {state.clues!.map((clue, index) => (
+                    <Text key={index} style={styles.resultText}>{clue}</Text>
+                ))}
+            </ScrollView>
 
             <View style={styles.linkContainer}>
                 <TouchableOpacity onPress={copyToClipboard}>
@@ -69,6 +71,9 @@ export const ResultView = ({ state, dispatch }: ViewProps<GameShareState, GameSh
             <Text style={styles.link} selectable={true}>{gameUrl}</Text>
 
             <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.doneButton} onPress={retry}>
+                    <Text style={styles.doneText}>Retry</Text>
+                </TouchableOpacity>
                 <Button onPress={share} title="Share" style={styles.shareButton} />
 
                 <TouchableOpacity style={styles.doneButton} onPress={() => dispatch({ type: 'FINISH' })}>
@@ -90,6 +95,7 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 24,
+        marginTop: 40,
         fontWeight: 'bold',
     },
     subtext: {
@@ -98,7 +104,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
-        marginTop: 20,
+        marginBottom: 40,
         justifyContent: 'space-around',
         width: '100%',
     },
@@ -108,9 +114,12 @@ const styles = StyleSheet.create({
 
     },
     clueContainer: {
+        marginTop: 20,
+        marginHorizontal: 20,
     },
     imageContainer: {
         height: 200,
+        width: '100%',
         overflow: 'hidden',
         borderRadius: 8,
         borderWidth: 1,
@@ -132,9 +141,6 @@ const styles = StyleSheet.create({
     },
     instructions: {
         fontSize: 18,
-    },
-    resultContainer: {
-        gap: 20,
     },
     resultText: {
         fontSize: 15,

@@ -12,6 +12,8 @@
     "storybook": "expo start"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "8.4.4",
+    "@react-native-community/slider": "5.0.1",
     "babel-preset-expo": "^54.0.7",
     "cactus-react-native": "^1.2.0",
     "expo": "~54.0.25",

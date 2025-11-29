@@ -1,3 +1,9 @@
+/*
+ Prompts for generating I Spy game clues.
+
+ TODO: these prompts should be data sources, not code.
+*/
+
 import { Prompt } from "./CluesConfig"
 
 export const ONESHOT_PROMPT = (answer: string | null | undefined): Prompt => ({

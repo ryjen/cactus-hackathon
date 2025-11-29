@@ -1,5 +1,6 @@
 import { CactusConfig } from 'cactus-react-native';
 
+// TODO: move this to environment variables
 CactusConfig.telemetryToken = '92ce1e2d-72d5-4835-9232-37583dad2117';
 // CactusConfig.cactusToken = 'AIzaSyBUMolfYcgWgagq6cm2-jAPgPoYy8H_4uw';
 // CactusConfig.cactusToken = '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';
