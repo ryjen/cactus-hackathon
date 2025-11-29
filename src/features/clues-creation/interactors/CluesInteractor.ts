@@ -16,7 +16,6 @@ export class CluesInteractor extends Interactor<CluesState, CluesAction> {
         switch (intent.type) {
             case 'RESULT':
                 try {
-                    console.log('parsing', intent.payload)
                     const lines = intent.payload!.result!.trim().split('\n');
                     const pos = lines.findIndex(l => l.includes("::"));
                     const end = lines.findLastIndex(l => l.includes("::"));
@@ -28,7 +27,6 @@ export class CluesInteractor extends Interactor<CluesState, CluesAction> {
                             clue: clue.trim()
                         }))
                     }
-                    console.log('result', result)
                     return this.router.replace({
                         pathname: `/features/game-creation`,
                         params: {

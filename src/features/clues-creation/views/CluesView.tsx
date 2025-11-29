@@ -55,7 +55,6 @@ export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction
 
     if (!result.canceled) {
       const originalUri = result.assets[0].uri;
-      console.log('originalUri', originalUri);
       const processedUri = await preprocessImage(originalUri);
       dispatch({ type: 'PHOTO', payload: originalUri });
       setPhotoUrl(processedUri);

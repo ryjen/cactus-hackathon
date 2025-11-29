@@ -33,7 +33,6 @@ export class Interactor<State, Intent extends Action<string, any>> implements In
 
     public dispatch(intent: Intent): void {
         // 1. Reduce
-        console.log(intent);
         const currentState = this.store.getState();
         const newState = this.reducer(currentState, intent);
 
