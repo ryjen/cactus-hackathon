@@ -1,9 +1,16 @@
 import { CluesState, CluesAction } from "../types";
 
+const defaultMessages = [
+    '🕵️‍♂️ Spy activated!',
+    '🔍 Searching for clues...',
+    '💼 Mission in progress...',
+    '🚁 Extraction imminent...',
+];
+
 export const initialState: CluesState = {
     photoUrl: '/data/user/0/com.rybertjen.eyespie/cache/ImagePicker/9dbbca94-ca8d-4c5a-b2de-43e2df9def03.jpeg',
     answer: 'flower',
-    messages: [],
+    messages: defaultMessages,
     busy: false,
     error: null,
     mode: 'image',

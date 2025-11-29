@@ -4,6 +4,7 @@ const loaders: Record<string, () => Promise<any>> = {
   'camera': () => import('./camera/index'),
   'clues-creation': () => import('./clues-creation/index'),
   'game-creation': () => import('./game-creation/index'),
+  'game-share': () => import('./game-share/index'),
   'welcome': () => import('./welcome/index'),
 }
 

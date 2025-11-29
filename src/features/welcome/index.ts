@@ -1,14 +1,14 @@
 import { DependencyContainer } from "tsyringe";
-import { WelcomeScreen } from "./views";
+import { AnimatedWelcomeScreen } from "./views";
 import { FeatureMetadata } from "@/lib/domain/types";
 
 const feature: FeatureMetadata = {
     name: 'welcome',
-    entryComponent: WelcomeScreen,
+    entryComponent: AnimatedWelcomeScreen,
     hooks: [],
-    screens: { index: WelcomeScreen },
+    screens: { index: AnimatedWelcomeScreen },
     init: (container: DependencyContainer) => {
-        container.register('WelcomeScreen', { useValue: WelcomeScreen })
+        container.register('AnimatedWelcomeScreen', { useValue: AnimatedWelcomeScreen })
     }
 }
 

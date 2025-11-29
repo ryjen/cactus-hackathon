@@ -4,7 +4,6 @@ import { GameCreationState, GameCreationAction } from '../types';
 import { initialState, gameCreationReducer } from '../reducers/GameCreationReducer';
 import { ObfuscationService } from '@/lib/domain/services/ObfuscationService';
 import { PhotoFromUrl } from '../usecases/PhotoFromUrl';
-import { SharingService } from '@/lib/domain/services/SharingService';
 
 @injectable()
 export class GameCreationInteractor extends Interactor<
@@ -14,7 +13,6 @@ export class GameCreationInteractor extends Interactor<
     constructor(
         @inject(ObfuscationService) private obfuscationService: ObfuscationService,
         @inject(PhotoFromUrl) private loadPhoto: PhotoFromUrl,
-        @inject(SharingService) private sharingService: SharingService
     ) {
         super(initialState, gameCreationReducer);
     }
@@ -54,7 +52,7 @@ export class GameCreationInteractor extends Interactor<
 
                     // TODO: Save game
 
-                    this.sharingService.shareGame(game as any);
+                    // this.sharingService.shareGame(game as any);
                 }
                 break;
             default:

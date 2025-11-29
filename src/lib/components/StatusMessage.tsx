@@ -1,25 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Text, View, StyleSheet, type TextStyle } from 'react-native';
 
-const defaultMessages = [
-    '🕵️‍♂️ Spy activated!',
-    '🔍 Searching for clues...',
-    '💼 Mission in progress...',
-    '🚁 Extraction imminent...',
-];
-
-interface MessageRotatorProps {
+interface StatusMessageProps {
     interval?: number;
-    custom?: string[];
+    messages: string[];
     textStyle?: TextStyle;
 }
 
-const MessageRotator = ({ interval = 3000, custom = [], textStyle }: MessageRotatorProps) => {
+export const StatusMessage = ({ interval = 3000, messages, textStyle }: StatusMessageProps) => {
     const opacity = useRef(new Animated.Value(0)).current;
 
-    const messages = useMemo(() => [...custom, ...defaultMessages], [custom]);
     const [index, setIndex] = useState(0);
-
 
     const fadeIn = useCallback(() => {
         Animated.timing(opacity, {
@@ -48,6 +39,10 @@ const MessageRotator = ({ interval = 3000, custom = [], textStyle }: MessageRota
         return () => clearInterval(timer);
     }, [interval, fadeOut, fadeIn]);
 
+    if (!messages || messages.length === 0) {
+        return null;
+    }
+
     return (
         <View style={styles.container}>
             <Animated.Text style={[styles.text, textStyle, { opacity }]}>
@@ -68,5 +63,3 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
-
-export default MessageRotator;

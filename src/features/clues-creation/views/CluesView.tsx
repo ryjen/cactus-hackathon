@@ -12,8 +12,8 @@ import {
 import { CluesState, CluesAction } from '../types';
 import { ViewProps } from '@/lib/core/types';
 import * as ImagePicker from 'expo-image-picker';
-import { preprocessImage } from './CluesUtils';
-import { useCluesAI } from './hooks/useCluesAI';
+import { preprocessImage } from '@/lib/core/ai';
+import { useCluesAI } from '@/lib/core/hooks';
 
 export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction>) => {
   const [answer, setAnswer] = useState<string | null>(state.answer);
@@ -26,18 +26,22 @@ export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction
   }, [photoUrl]);
 
   const {
-    handleAnalyze,
+    analyze: handleAnalyze,
     result,
     isDownloading,
     downloadInfo,
     isGenerating,
-  } = useCluesAI(photoUrl, answer, dispatch);
+    isInitializing,
+    error: aiError
+  } = useCluesAI(photoUrl, answer);
+
+  const [error, setError] = useState<string | null | undefined>();
 
   const handleSelectPhoto = useCallback(async () => {
     // Ask for permission
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
-      alert("Permission to access gallery is required!");
+      setError("Permission to access gallery is required!");
       return;
     }
 

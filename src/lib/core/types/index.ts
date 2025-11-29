@@ -1,6 +1,6 @@
 export * from './interactors';
 export * from './viewprops';
-
+export * from './ai';
 export type UUID = string;
 export type URL = string;
 export type Timestamp = number;
@@ -21,8 +21,9 @@ export interface Photo extends Entity {
 }
 
 export interface ObfuscationConfig {
-    method: 'blur' | 'pixelate';
+    method?: 'blur' | 'pixelate';
     intensity: number;
+    region?: { x: number, y: number, width: number, height: number }
 }
 
 export interface Clue extends Entity {

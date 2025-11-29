@@ -1,18 +1,37 @@
-import { Photo, ObfuscationConfig } from '@/lib/core/types';
+import { ObfuscationConfig } from '@/lib/core/types';
 import { injectable } from 'tsyringe';
-
-export interface IObfuscationService {
-    obfuscate(photo: Photo, region: { x: number, y: number, width: number, height: number }, config: ObfuscationConfig): Promise<string>;
-}
+import { IObfuscationService } from '../types';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { Image } from 'react-native';
 
 @injectable()
 export class ObfuscationService implements IObfuscationService {
-    async obfuscate(photo: Photo, region: { x: number, y: number, width: number, height: number }, config: ObfuscationConfig): Promise<string> {
-        // TODO: Implement actual obfuscation using expo-gl or similar
-        console.log('Obfuscating photo', photo.id, 'region', region, 'config', config);
+    async obfuscate(photoUrl: string, config: ObfuscationConfig): Promise<string> {
+        console.log('Obfuscating photo', 'config', config);
 
-        // For now, return the original URL (mock implementation)
-        // In a real implementation, this would save a new image to the file system
-        return photo.originalUrl;
+        // Simple blur implementation: Downscale and upscale
+        // We ignore the region for now as Expo ImageManipulator doesn't support easy composition without native modules
+
+        const intensity = config.intensity || 50;
+        // Scale down factor: 100 intensity -> 0.02 scale, 0 intensity -> 1.0 scale
+        const reductionFactor = 1 - (intensity / 100) * 0.98;
+
+        const { width } = await Image.getSize(photoUrl);
+        const smallWidth = Math.max(16, Math.floor(width * reductionFactor));
+
+        try {
+            const result = await ImageManipulator.manipulateAsync(
+                photoUrl,
+                [
+                    { resize: { width: smallWidth } },
+                    { resize: { width: width } }
+                ],
+                { compress: 0.9, format: ImageManipulator.SaveFormat.JPEG }
+            );
+            return result.uri;
+        } catch (error) {
+            console.error('Failed to obfuscate image', error);
+            return photoUrl;
+        }
     }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ProgressAnimation } from '../src/features/clues-creation/views/components/ProgressAnimation';
+import { ProgressAnimation } from '../src/lib/components/ProgressAnimation';
 
 // Simple Storybook viewer - shows the ProgressAnimation story
 export default function StorybookUI() {

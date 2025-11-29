@@ -13,14 +13,14 @@ export async function preprocessImage(uri: string) {
     return result.uri; // ready for inference
 }
 
-export const massageResponse = (response: string | null): string | null => {
+export const massageResponse = (response: string | null | undefined): string | null => {
     if (!response) return null;
     const end = response.lastIndexOf(END_TOKEN)
     const description = response.substring(0, end)
     return description
 }
 
-export const promptToMessages = (prompt: Prompt, image: string, completion: string | null, answer: string | null): Message[] => {
+export const promptToMessages = (prompt: Prompt, image: string, completion: string | null | undefined, answer: string | null | undefined): Message[] => {
     let messages: Array<Message> = [];
 
     if (prompt.system) {

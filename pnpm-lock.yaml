@@ -23,6 +23,9 @@ importers:
       expo-camera:
         specifier: ~17.0.9
         version: 17.0.9(expo@54.0.25)(react-native-web@0.21.2(encoding@0.1.13)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      expo-clipboard:
+        specifier: ~8.0.7
+        version: 8.0.7(expo@54.0.25)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       expo-constants:
         specifier: ~18.0.10
         version: 18.0.10(expo@54.0.25)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
@@ -2640,6 +2643,13 @@ packages:
     peerDependenciesMeta:
       react-native-web:
         optional: true
+
+  expo-clipboard@8.0.7:
+    resolution: {integrity: sha512-zvlfFV+wB2QQrQnHWlo0EKHAkdi2tycLtE+EXFUWTPZYkgu1XcH+aiKfd4ul7Z0SDF+1IuwoiW9AA9eO35aj3Q==}
+    peerDependencies:
+      expo: '*'
+      react: '*'
+      react-native: '*'
 
   expo-constants@18.0.10:
     resolution: {integrity: sha512-Rhtv+X974k0Cahmvx6p7ER5+pNhBC0XbP1lRviL2J1Xl4sT2FBaIuIxF/0I0CbhOsySf0ksqc5caFweAy9Ewiw==}
@@ -8105,6 +8115,12 @@ snapshots:
       react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
     optionalDependencies:
       react-native-web: 0.21.2(encoding@0.1.13)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+
+  expo-clipboard@8.0.7(expo@54.0.25)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0):
+    dependencies:
+      expo: 54.0.25(@babel/core@7.28.5)(@expo/metro-runtime@6.1.2)(@modelcontextprotocol/sdk@1.23.0(zod@3.25.76))(expo-router@6.0.15)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
 
   expo-constants@18.0.10(expo@54.0.25)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)):
     dependencies:

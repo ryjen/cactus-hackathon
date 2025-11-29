@@ -1,0 +1,1 @@
+export { GameShareScreen } from "./GameShareScreen";

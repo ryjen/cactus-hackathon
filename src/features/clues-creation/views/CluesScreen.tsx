@@ -3,8 +3,7 @@ import { useCluesInteractor } from "../hooks";
 import { CluesView } from "./CluesView";
 import { useLocalSearchParams } from "expo-router";
 import { AudioView } from "./AudioView";
-import { ProgressAnimation } from "./components/ProgressAnimation";
-import StatusMessage from "./components/StatusMessage";
+import { ProgressAnimation, StatusMessage } from "@/lib/components";
 
 export function CluesScreen() {
     const { state, dispatch } = useCluesInteractor();
@@ -18,7 +17,7 @@ export function CluesScreen() {
 
     if (state.busy) {
         return <ProgressAnimation visible={true}>
-            <StatusMessage custom={state.messages} textStyle={{ color: 'white' }} />
+            <StatusMessage messages={state.messages} textStyle={{ color: 'white' }} />
         </ProgressAnimation>
     }
 

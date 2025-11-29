@@ -1,9 +1,10 @@
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useEffect } from 'react';
 import * as Updates from 'expo-updates';
+import * as Linking from 'expo-linking';
 
 export default function RootLayout() {
     useEffect(() => {
@@ -22,6 +23,19 @@ export default function RootLayout() {
 
         void onFetchUpdateAsync();
     }, []);
+
+    const router = useRouter();
+
+    useEffect(() => {
+        const subscription = Linking.addEventListener('url', ({ url }) => {
+            const { path } = Linking.parse(url);
+            if (!path) return;
+            router.push(path);
+        });
+
+        return () => subscription.remove();
+    }, []);
+
 
     return (
         <SafeAreaProvider>

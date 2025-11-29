@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { View, StyleSheet, Image, Animated, Dimensions, Easing } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, StyleSheet, Animated, Dimensions, Easing } from 'react-native';
 import { default as RunningSpy } from './Spy';
 
 const { width: screenWidth } = Dimensions.get('window');
