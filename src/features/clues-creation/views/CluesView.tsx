@@ -2,166 +2,119 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
   ActivityIndicator,
   Image,
+  TextInput,
 } from 'react-native';
-import Constants from 'expo-constants';
 import { CluesState, CluesAction } from '../types';
 import { ViewProps } from '@/lib/core/types';
-
-// Feature flag: Only use CactusLM in development builds (not Expo Go)
-const USE_CACTUS_LM = Constants.executionEnvironment !== 'storeClient';
-
-// Conditionally import CactusLM
-let useCactusLM: any = null;
-let Message: any = null;
-let CactusLMCompleteResult: any = null;
-
-if (USE_CACTUS_LM) {
-  const cactusModule = require('cactus-react-native');
-  useCactusLM = cactusModule.useCactusLM;
-  Message = cactusModule.Message;
-  CactusLMCompleteResult = cactusModule.CactusLMCompleteResult;
-}
+import * as ImagePicker from 'expo-image-picker';
+import { preprocessImage } from './CluesUtils';
+import { useCluesAI } from './hooks/useCluesAI';
 
 export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction>) => {
-  const cactusLM = USE_CACTUS_LM ? useCactusLM({ model: 'lfm2-vl-450m' }) : null;
-  const [input, setInput] = useState("What's in the image?");
-  const [result, setResult] = useState<any>(null);
+  const [answer, setAnswer] = useState<string | null>(state.answer);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(state.photoUrl);
 
   useEffect(() => {
-    if (!USE_CACTUS_LM || !cactusLM) return;
-
-    if (!cactusLM.isDownloaded) {
-      cactusLM.download();
-    } else {
-      cactusLM.init();
+    if (state.photoUrl !== photoUrl) {
+      void preprocessImage(state.photoUrl!).then(setPhotoUrl).catch(console.warn);
     }
-    return () => {
-      cactusLM.destroy();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [USE_CACTUS_LM, cactusLM?.isDownloaded]);
+  }, [photoUrl]);
 
-  const handleAnalyze = useCallback(async () => {
-    if (!state.photoUrl) return;
+  const {
+    handleAnalyze,
+    result,
+    isDownloading,
+    downloadInfo,
+    isGenerating,
+  } = useCluesAI(photoUrl, answer, dispatch);
 
-    if (!USE_CACTUS_LM || !cactusLM) {
-      // Fallback for Expo Go - just show a placeholder
-      setResult({
-        success: true,
-        response: 'CactusLM is only available in development builds. Please use "npx expo run:android" to test AI features.',
-        functionCalls: undefined,
-        timeToFirstTokenMs: 0,
-        totalTimeMs: 0,
-        tokensPerSecond: 0,
-        prefillTokens: 0,
-        decodeTokens: 0,
-        totalTokens: 0,
-      });
+  const handleSelectPhoto = useCallback(async () => {
+    // Ask for permission
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Permission to access gallery is required!");
       return;
     }
 
-    const messages: any[] = [
-      {
-        role: 'system',
-        content: 'You are a helpful assistant that can analyze images.',
-      },
-      {
-        role: 'user',
-        content: input,
-        images: [state.photoUrl],
-      },
-    ];
+    // Launch image picker
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-    const completionResult = await cactusLM.complete({ messages });
-    setResult(completionResult);
-  }, [state.photoUrl, input, cactusLM]);
+    if (!result.canceled) {
+      const originalUri = result.assets[0].uri;
+      console.log('originalUri', originalUri);
+      const processedUri = await preprocessImage(originalUri);
+      dispatch({ type: 'PHOTO', payload: originalUri });
+      setPhotoUrl(processedUri);
+    }
+  }, [dispatch]);
 
-  const saveClues = useCallback(() => {
-    if (!result) return;
-    dispatch({ type: 'SAVE', payload: result });
-  }, [result, dispatch]);
-
-  if (!state.photoUrl) {
-    return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.progressText}>No photo selected</Text>
-      </View>
-    );
-  }
-
-  if (USE_CACTUS_LM && cactusLM?.isDownloading) {
+  if (isDownloading) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" />
-        <Text style={styles.progressText}>
-          Downloading model: {Math.round(cactusLM.downloadProgress * 100)}%
-        </Text>
+        {downloadInfo.map((item: { model: string, progress: number }, index: number) => (
+          <Text key={index} style={styles.progressText}>
+            Downloading {item.model}: {item.progress}%
+          </Text>
+        ))}
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Image source={{ uri: state.photoUrl }} style={styles.image} />
+      <View style={[styles.content, styles.centerContainer, { width: 300, height: 300 }]}>
+        {state.photoUrl ? <Image source={{ uri: "file://" + state.photoUrl }} style={styles.image} width={300} height={300} /> : <Text>No photo selected</Text>}
+      </View >
 
       <TextInput
         style={styles.input}
-        value={input}
-        onChangeText={setInput}
-        placeholder="Ask about the image..."
-        multiline
+        placeholder="Enter your answer"
+        onChangeText={setAnswer}
+        value={answer || ''}
       />
 
       <View style={styles.buttonContainer}>
-
         <TouchableOpacity
-          style={[styles.button, !state.photoUrl && styles.buttonDisabled]}
-          onPress={handleAnalyze}
-          disabled={!state.photoUrl || (USE_CACTUS_LM && cactusLM?.isGenerating)}
+          style={[styles.button, state.busy && styles.buttonDisabled]}
+          onPress={handleSelectPhoto}
+          disabled={state.busy}
         >
-          <Text style={styles.buttonText}>
-            {USE_CACTUS_LM && cactusLM?.isGenerating ? 'Analyzing...' : 'Analyze'}
-          </Text>
+          <Text style={styles.buttonText}>Select Photo</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
-          style={[styles.button, !state.photoUrl && styles.buttonDisabled]}
-          onPress={saveClues}
-          disabled={!state.photoUrl || (USE_CACTUS_LM && cactusLM?.isGenerating)}
+          style={[styles.button, state.busy && styles.buttonDisabled]}
+          onPress={handleAnalyze}
+          disabled={state.busy}
         >
-          <Text style={styles.buttonText}>
-            Save
-          </Text>
+          <Text style={styles.buttonText}>Analyze</Text>
         </TouchableOpacity>
       </View>
 
       {result && (
-        <View style={styles.resultContainer}>
+        <View style={styles.centerContainer}>
           <Text style={styles.resultLabel}>CactusLMCompleteResult:</Text>
           <View style={styles.resultBox}>
             <Text style={styles.resultFieldLabel}>success:</Text>
-            <Text style={styles.resultFieldValue}>
+            <Text style={styles.resultValue}>
               {result.success.toString()}
             </Text>
 
             <Text style={[styles.resultFieldLabel, styles.marginTop]}>
               response:
             </Text>
-            <Text style={styles.resultFieldValue}>{result.response}</Text>
-
-            <Text style={[styles.resultFieldLabel, styles.marginTop]}>
-              functionCalls:
-            </Text>
             <Text style={styles.resultFieldValue}>
-              {result.functionCalls
-                ? JSON.stringify(result.functionCalls, null, 2)
-                : 'undefined'}
+              {result.response}
             </Text>
 
             <Text style={[styles.resultFieldLabel, styles.marginTop]}>
@@ -169,13 +122,6 @@ export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction
             </Text>
             <Text style={styles.resultFieldValue}>
               {result.timeToFirstTokenMs.toFixed(2)}
-            </Text>
-
-            <Text style={[styles.resultFieldLabel, styles.marginTop]}>
-              totalTimeMs:
-            </Text>
-            <Text style={styles.resultFieldValue}>
-              {result.totalTimeMs.toFixed(2)}
             </Text>
 
             <Text style={[styles.resultFieldLabel, styles.marginTop]}>
@@ -196,27 +142,28 @@ export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction
             <Text style={styles.resultFieldValue}>{result.decodeTokens}</Text>
 
             <Text style={[styles.resultFieldLabel, styles.marginTop]}>
-              totalTokens:
+              totalTimeMs:
             </Text>
-            <Text style={styles.resultFieldValue}>{result.totalTokens}</Text>
+            <Text style={styles.resultFieldValue}>{result.totalTimeMs.toFixed(2)}</Text>
+
+            <Text style={[styles.resultFieldLabel, styles.marginTop]}>
+              tokensPerSecond:
+            </Text>
+            <Text style={styles.resultFieldValue}>{result.tokensPerSecond.toFixed(2)}</Text>
+
+            <Text style={[styles.resultFieldLabel, styles.marginTop]}>
+              prefillTokens:
+            </Text>
+            <Text style={styles.resultFieldValue}>{result.prefillTokens}</Text>
+
+            <Text style={[styles.resultFieldLabel, styles.marginTop]}>
+              decodeTokens:
+            </Text>
+            <Text style={styles.resultFieldValue}>{result.decodeTokens}</Text>
           </View>
         </View>
       )}
-
-      {USE_CACTUS_LM && cactusLM?.error && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{cactusLM.error}</Text>
-        </View>
-      )}
-
-      {!USE_CACTUS_LM && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>
-            ℹ️ AI features require a development build. Run "npx expo run:android" to enable CactusLM.
-          </Text>
-        </View>
-      )}
-    </ScrollView>
+    </ScrollView >
   );
 };
 
@@ -244,7 +191,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#ddd',
     borderRadius: 8,
-    borderStyle: 'dashed',
+    borderStyle: 'solid',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -254,20 +201,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
-  },
-  imageButtonText: {
-    fontSize: 16,
-    color: '#666',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    textAlignVertical: 'top',
-    marginBottom: 16,
-    color: '#000',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -282,6 +215,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  input: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 16,
+  },
   buttonDisabled: {
     backgroundColor: '#ccc',
   },
@@ -292,6 +232,11 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     marginTop: 16,
+  },
+  resultValue: {
+    fontSize: 14,
+    color: '#000',
+    lineHeight: 20,
   },
   resultLabel: {
     fontSize: 16,
@@ -327,5 +272,5 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#fff',
     fontSize: 14,
-  },
+  }
 });

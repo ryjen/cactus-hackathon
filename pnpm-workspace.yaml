@@ -1,2 +1,3 @@
 onlyBuiltDependencies:
+  - esbuild
   - react-native-nitro-modules

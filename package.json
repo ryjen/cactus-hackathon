@@ -8,15 +8,17 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "storybook": "expo start"
   },
   "dependencies": {
     "babel-preset-expo": "^54.0.7",
-    "cactus-react-native": "^1.0.2",
+    "cactus-react-native": "^1.2.0",
     "expo": "~54.0.25",
     "expo-blur": "^15.0.7",
     "expo-camera": "~17.0.9",
     "expo-constants": "~18.0.10",
+    "expo-document-picker": "~14.0.7",
     "expo-file-system": "~19.0.19",
     "expo-image-manipulator": "^14.0.7",
     "expo-image-picker": "~17.0.8",
@@ -41,6 +43,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.28.0",
+    "@storybook/addon-ondevice-actions": "^10.1.0",
+    "@storybook/addon-ondevice-controls": "^10.1.0",
+    "@storybook/react-native": "^10.1.0",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.0.0",
     "@types/react": "~19.1.0",

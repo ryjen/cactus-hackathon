@@ -6,8 +6,12 @@ export function WelcomeScreen() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Eyespie</Text>
-            <Link href="/features/camera" style={styles.link}>
+            <Link href="/features/clues-creation" style={styles.link}>
                 <Text>New Game</Text>
+            </Link>
+            <View style={styles.spacer} />
+            <Link href="/storybook" style={styles.link}>
+                <Text>Storybook</Text>
             </Link>
         </View>
     );
@@ -28,5 +32,8 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#ddd',
         borderRadius: 5,
+    },
+    spacer: {
+        height: 20,
     },
 });

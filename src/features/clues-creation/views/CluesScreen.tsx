@@ -2,19 +2,31 @@ import { useEffect } from "react";
 import { useCluesInteractor } from "../hooks";
 import { CluesView } from "./CluesView";
 import { useLocalSearchParams } from "expo-router";
+import { AudioView } from "./AudioView";
+import { ProgressAnimation } from "./components/ProgressAnimation";
+import StatusMessage from "./components/StatusMessage";
 
 export function CluesScreen() {
     const { state, dispatch } = useCluesInteractor();
     const params = useLocalSearchParams<{ photoUrl: string }>()
 
     useEffect(() => {
-        // Use the param photoUrl, or fallback to a test URL for development
-        const photoUrl = params.photoUrl || 'https://picsum.photos/400/300';
-
-        if (photoUrl) {
-            dispatch({ type: 'START', payload: photoUrl });
+        if (params.photoUrl) {
+            dispatch({ type: 'PHOTO', payload: params.photoUrl });
         }
     }, [params.photoUrl, dispatch]);
 
-    return (<CluesView state={state} dispatch={dispatch} />)
+    if (state.busy) {
+        return <ProgressAnimation visible={true}>
+            <StatusMessage custom={state.messages} textStyle={{ color: 'white' }} />
+        </ProgressAnimation>
+    }
+
+    switch (state.mode) {
+        case 'audio':
+            return <AudioView state={state} dispatch={dispatch} />
+        case 'image':
+            return <CluesView state={state} dispatch={dispatch} />
+    }
+
 }

@@ -8,6 +8,7 @@ dependencies:
     - danielmeppiel/design-guidelines
   mcp:
     #- io.github.github/github-mcp-server
+    #- "@mobilenext/mobile-mcp"
 scripts:
     audit: "copilot --skip-git-repo-check compliance-audit.prompt.md"
     gdpr-check: "copilot gdpr-assessment.prompt.md"
