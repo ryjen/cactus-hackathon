@@ -1,12 +1,30 @@
 import 'reflect-metadata';
+
+// Mock Router to avoid dependency issues
+jest.mock('expo-router', () => ({
+    router: {
+        push: jest.fn(),
+        replace: jest.fn(),
+        back: jest.fn(),
+        canGoBack: jest.fn(() => true),
+    },
+}));
+
 import { CameraInteractor } from '../CameraInteractor';
 import { CameraAction } from '../../types';
 
 describe('CameraInteractor', () => {
     let interactor: CameraInteractor;
+    let mockRouter: any;
 
     beforeEach(() => {
-        interactor = new CameraInteractor();
+        mockRouter = {
+            push: jest.fn(),
+            replace: jest.fn(),
+            back: jest.fn(),
+            canGoBack: jest.fn(() => true),
+        };
+        interactor = new CameraInteractor(mockRouter);
     });
 
     describe('Initial State', () => {

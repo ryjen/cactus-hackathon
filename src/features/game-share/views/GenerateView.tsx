@@ -1,18 +1,24 @@
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import type { GameShareState, GameShareAction } from "../types";
 import type { ViewProps } from "@/lib/core/types";
-import { useCluesAI } from "@/lib/core/hooks";
-import { useCallback, useEffect, useState } from "react";
+import { useCluesAI } from "@/features/game-share/hooks";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ProgressAnimation, StatusMessage } from "@/lib/components";
 
 
 export const GenerateView = ({ state, dispatch }: ViewProps<GameShareState, GameShareAction>) => {
 
-    const { analyze, response, isDownloading, downloadInfo, error } = useCluesAI(state.photoUrl!.replace('file://', ''), state.answer);
+    const { analyze, response, isDownloading, downloadInfo, error } = useCluesAI();
+
+    const imageUrl = useMemo(() => {
+        return state.photoUrl!.replace('file://', '')
+    }, [state.photoUrl])
 
     useEffect(() => {
-        void analyze().then(() => console.log('analyzing')).catch(console.warn)
-    }, []);
+        if (imageUrl) {
+            void analyze(imageUrl, state.answer).then(() => console.log('analyzing')).catch(console.warn);
+        }
+    }, [analyze, imageUrl, state.answer]);
 
     const [messages, setMessages] = useState<string[]>([
         '🕵️‍♂️ Spy activated!',

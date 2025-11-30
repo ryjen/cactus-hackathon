@@ -10,7 +10,7 @@ export type Action<Type extends string, Payload = undefined> = Intent<Payload> &
 export type Reducer<State, Intent extends Action<string, any>> = (state: State, intent: Intent) => State;
 
 export interface Inducer<State, Intent extends Action<string, any>> {
-    induce(intent: Intent, state: State, dispatch: (intent: Intent) => void): Promise<void> | void;
+    induce(intent: Intent, state: State): Promise<void> | void;
 };
 
 export interface InteractorHook<S, I> {

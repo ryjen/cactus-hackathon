@@ -1,2 +1,2 @@
 export * from './useInteractor';
-export * from './useCluesAI';
+export * from './useDependency';

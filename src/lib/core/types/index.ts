@@ -1,6 +1,6 @@
 export * from './interactors';
 export * from './viewprops';
-export * from './ai';
+
 export type UUID = string;
 export type URL = string;
 export type Timestamp = number;

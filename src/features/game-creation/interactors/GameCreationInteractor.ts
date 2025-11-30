@@ -27,9 +27,11 @@ export class GameCreationInteractor extends Interactor<
                 if (state.photo && state.targetRegion) {
                     try {
                         const newUrl = await this.obfuscationService.obfuscate(
-                            state.photo,
-                            state.targetRegion,
-                            state.obfuscationConfig
+                            state.photo.originalUrl,
+                            {
+                                region: state.targetRegion,
+                                ...state.obfuscationConfig
+                            }
                         );
                         this.dispatch({ type: 'OBFUSCATION_SUCCESS', payload: newUrl });
                     } catch (error) {

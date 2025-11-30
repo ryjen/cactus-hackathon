@@ -1,6 +1,9 @@
 import { ObfuscationConfig } from "@/lib/core/types";
 import { DependencyContainer } from "tsyringe";
 
+export * from "./ai";
+export * from "./repositories";
+
 /**
  * Use case interface for business logic
  */
@@ -19,3 +22,4 @@ export interface FeatureMetadata {
 export interface IObfuscationService {
     obfuscate(photoUrl: string, config: ObfuscationConfig): Promise<string>;
 }
+

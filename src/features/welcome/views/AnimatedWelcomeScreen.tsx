@@ -5,8 +5,8 @@ import {
     Animated,
     Dimensions,
 } from 'react-native';
-import { Text, Link } from '@/lib/components';
 import { Theme } from '@/lib/core/theme';
+import { WelcomeView } from './WelcomeView';
 
 const { width, height } = Dimensions.get('window');
 
@@ -176,19 +176,12 @@ export const AnimatedWelcomeScreen = () => {
                 </Animated.View>
             </View>
 
-            {/* Title */}
-            <View style={styles.textContainer}>
-                <Text style={styles.welcomeText}>Welcome</Text>
-                <Text style={styles.subText}>to Eyespie</Text>
-                <View style={styles.spacer} />
-                <View style={styles.spacer} />
-                <Link href="/features/game-share" style={styles.link} title="New Game" />
-            </View>
+            <WelcomeView style={styles.textContainer} />
+
         </View>
     );
 };
 
-const PRIMARY = Theme.colors.primary;
 const PRIMARY_DARK = Theme.colors.primaryLight;
 const OUTLINE = Theme.colors.outline;
 const CLOUD = Theme.colors.background;
@@ -196,21 +189,11 @@ const CLOUD = Theme.colors.background;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //backgroundColor: PRIMARY,
         alignItems: 'center',
         justifyContent: 'flex-start',
     },
     sky: {
         ...StyleSheet.absoluteFillObject,
-        //backgroundColor: PRIMARY,
-    },
-    link: {
-        padding: 10,
-        //backgroundColor: PRIMARY_DARK,
-        borderRadius: 5,
-    },
-    spacer: {
-        height: 20,
     },
     // Clouds
     cloud: {
@@ -342,20 +325,7 @@ const styles = StyleSheet.create({
 
     // Text
     textContainer: {
-        alignItems: 'center',
         marginTop: 16,
-    },
-    welcomeText: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: OUTLINE,
-        letterSpacing: 2,
-    },
-    subText: {
-        fontSize: 18,
-        color: OUTLINE,
-        opacity: 0.9,
-        marginTop: 4,
     },
 });
 

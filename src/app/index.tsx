@@ -1,6 +1,6 @@
 import { AnimatedWelcomeScreen } from "@/features/welcome/views";
 
 
-export default function Welcome() {
+export default function WelcomeRoute() {
     return (<AnimatedWelcomeScreen />);
 }

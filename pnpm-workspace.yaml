@@ -1,3 +1,6 @@
 onlyBuiltDependencies:
   - esbuild
   - react-native-nitro-modules
+
+patchedDependencies:
+  cactus-react-native: patches/cactus-react-native.patch

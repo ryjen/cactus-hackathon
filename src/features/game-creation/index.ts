@@ -1,7 +1,7 @@
 import { DependencyContainer } from "tsyringe"
 import { useGameCreationInteractor } from "./hooks"
-import { GameCreationInteractor } from "./interactors/GameCreationInteractor"
-import { GameCreationScreen } from "./views/GameCreationScreen"
+import { GameCreationInteractor } from "./interactors"
+import { GameCreationScreen } from "./views"
 import { PhotoFromUrl } from "./usecases/PhotoFromUrl"
 import { FeatureMetadata } from "@/lib/domain/types"
 

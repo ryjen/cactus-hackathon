@@ -1,3 +1,4 @@
+import type { AIHookOneShotResult, AIHookMultiShotResult } from "@/lib/ai/types";
 import type { Action } from "@/lib/core/types";
 
 export interface GameShareState {
@@ -16,3 +17,8 @@ export type GameShareAction =
     Action<'FINISH'> |
     Action<'ERROR', string> |
     Action<'RESULT', string[]>;
+
+
+export type CluesHookResult = (Omit<AIHookOneShotResult, 'analyze'> | Omit<AIHookMultiShotResult, 'analyze'>) & {
+    analyze: (imageUrl: string, hint?: string | null) => Promise<void>;
+}

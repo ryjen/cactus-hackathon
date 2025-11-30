@@ -1,2 +1,2 @@
-export * from './useDependency'
+export * from '../hooks/useDependency'
 export * from './container'

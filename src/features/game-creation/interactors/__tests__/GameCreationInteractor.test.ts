@@ -1,13 +1,36 @@
 import 'reflect-metadata';
+
+// Mock ObfuscationService to avoid Jest parsing issues with expo-image-manipulator
+jest.mock('@/lib/domain/services/ObfuscationService', () => ({
+    ObfuscationService: jest.fn().mockImplementation(() => ({
+        obfuscate: jest.fn(),
+    })),
+}));
+
+// Mock PhotoFromUrl to avoid any potential dependencies
+jest.mock('../../usecases/PhotoFromUrl', () => ({
+    PhotoFromUrl: jest.fn().mockImplementation(() => ({
+        execute: jest.fn(),
+    })),
+}));
+
 import { GameCreationInteractor } from '../GameCreationInteractor';
 import { GameCreationAction } from '../../types';
 import { Photo, ObfuscationConfig, Clue } from '@/lib/core/types';
 
 describe('GameCreationInteractor', () => {
     let interactor: GameCreationInteractor;
+    let mockObfuscationService: any;
+    let mockPhotoFromUrl: any;
 
     beforeEach(() => {
-        interactor = new GameCreationInteractor();
+        mockObfuscationService = {
+            obfuscate: jest.fn(),
+        };
+        mockPhotoFromUrl = {
+            execute: jest.fn(),
+        };
+        interactor = new GameCreationInteractor(mockObfuscationService, mockPhotoFromUrl);
     });
 
     describe('Initial State', () => {

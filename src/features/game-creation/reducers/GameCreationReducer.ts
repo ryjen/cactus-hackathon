@@ -27,6 +27,12 @@ export function gameCreationReducer(
         case 'OBFUSCATION_SUCCESS':
             return { ...state, obfuscatedUrl: action.payload };
 
+        case 'ADD_CLUE':
+            return { ...state, clues: [...state.clues, action.payload] };
+
+        case 'REMOVE_CLUE':
+            return { ...state, clues: state.clues.filter(clue => clue.id !== action.payload) };
+
         case 'FINALIZE_GAME':
             return { ...state, step: 'review', status: 'ready' };
 

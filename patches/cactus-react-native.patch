@@ -1,0 +1,15 @@
+diff --git a/android/build.gradle b/android/build.gradle
+index 4cf1a8014392b3c0e13a5510d937defa8a05e455..9cc04133f17ef2c5e055a24032d6cc80a0b94e76 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -39,6 +39,10 @@ android {
+     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+ 
++    ndk {
++      abiFilters (*reactNativeArchitectures())
++    }
++
+     externalNativeBuild {
+       cmake {
+         cppFlags "-frtti -fexceptions -Wall -fstack-protector-all"

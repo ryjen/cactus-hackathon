@@ -12,7 +12,7 @@ import {
 import { CluesState, CluesAction } from '../types';
 import { ViewProps } from '@/lib/core/types';
 import * as ImagePicker from 'expo-image-picker';
-import { preprocessImage } from '@/lib/core/ai';
+import { preprocessImage } from '@/lib/ai/cactus';
 import { useCluesAI } from '@/lib/core/hooks';
 
 export const CluesView = ({ state, dispatch }: ViewProps<CluesState, CluesAction>) => {
